@@ -21,20 +21,27 @@ class LoginViewModel @Inject constructor(
     val login = _login.asSharedFlow()
 
 
-
     fun login(email: String, password: String) {
 
-        viewModelScope.launch { _login.emit(Resource.Loading()) }
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
-            viewModelScope.launch {
-                it.user?.let {
-                    _login.emit(Resource.Success(it))
+        viewModelScope.launch {
+            _login.emit(Resource.Loading())
+
+            try {
+                firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
+                    viewModelScope.launch {
+                        it.user?.let {
+                            _login.emit(Resource.Success(it))
+                        }
+                    }
+                }.addOnFailureListener {
+                    viewModelScope.launch {
+                        _login.emit(Resource.Error(it.message.toString()))
+                    }
                 }
+            } catch (e: Exception) {
+                _login.emit(Resource.Error(e.message.toString()))
             }
-        }.addOnFailureListener {
-            viewModelScope.launch {
-                _login.emit(Resource.Error(it.message.toString()))
-            }
+
         }
     }
 

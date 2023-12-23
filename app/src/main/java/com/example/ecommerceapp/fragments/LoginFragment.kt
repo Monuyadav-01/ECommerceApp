@@ -13,8 +13,9 @@ import com.example.ecommerceapp.activities.ShoppingActivity
 import com.example.ecommerceapp.databinding.FragmentLoginBinding
 import com.example.ecommerceapp.utils.Resource
 import com.example.ecommerceapp.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val viewModel by viewModels<LoginViewModel>()
