@@ -1,4 +1,4 @@
-package com.example.ecommerceapp.fragments
+package com.example.ecommerceapp.fragments.loginregister
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,8 +13,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.ecommerceapp.R
 import com.example.ecommerceapp.activities.ShoppingActivity
 import com.example.ecommerceapp.databinding.FragmentLoginBinding
+import com.example.ecommerceapp.dialog.setupBottomSheetDialog
 import com.example.ecommerceapp.utils.Resource
 import com.example.ecommerceapp.viewmodel.LoginViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,6 +46,47 @@ class LoginFragment : Fragment() {
                 val password = edPasswordLogin.text.toString()
 
                 viewModel.login(email, password)
+            }
+        }
+
+        binding.tvForgotPasswordLogin.setOnClickListener {
+            setupBottomSheetDialog { email ->
+
+                viewModel.resetPassword(email)
+
+
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.resetPassword.collect {
+                when (it) {
+                    is Resource.Loading -> {
+
+                    }
+
+                    is Resource.Success -> {
+                        Snackbar.make(
+                            requireView(),
+                            "Reset link was sent to your email",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+
+                    }
+
+                    is Resource.Error -> {
+                        Snackbar.make(
+                            requireView(),
+                            "Error ${it.message.toString()}",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+
+                    }
+
+                    else -> {
+                        Unit
+                    }
+                }
             }
         }
 

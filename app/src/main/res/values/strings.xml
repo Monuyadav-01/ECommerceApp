@@ -8,4 +8,5 @@
     <string name="monu">Monu</string>
     <string name="register">REGISTER</string>
     <string name="login">LOGIN</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AccountOptionsFragment">
+    tools:context=".fragments.loginregister.AccountOptionsFragment">
 
     <ImageView
         android:layout_width="match_parent"
@@ -52,6 +52,7 @@
             app:layout_constraintTop_toTopOf="@id/guideline_eclipse_top"
             app:layout_constraintVertical_bias="0.0" />
 
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/register_btn"
             android:layout_width="@dimen/smallButtonWidth"
@@ -61,24 +62,23 @@
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvQuality"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="@+id/guidelineEclipseLeft"
             app:layout_constraintTop_toBottomOf="@+id/tvQuality"
-            app:layout_constraintVertical_bias="0.122" />
+            app:layout_constraintVertical_bias="0.479" />
 
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_btn"
             android:layout_width="@dimen/smallButtonWidth"
             android:layout_height="@dimen/smallButtonHeight"
             android:elevation="10dp"
             android:text="@string/login"
-            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/register_btn"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/register_btn"
             app:layout_constraintTop_toBottomOf="@+id/register_btn"
-            app:layout_constraintVertical_bias="0.21" />
+            app:layout_constraintVertical_bias="0.09" />
 
         <TextView
             android:id="@+id/right_address_for_shopping"
@@ -136,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.85" />
+            app:layout_constraintGuide_percent="0.80" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_eclipse_top"
