@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.ecommerceapp.R
 import com.example.ecommerceapp.activities.ShoppingActivity
 import com.example.ecommerceapp.databinding.FragmentLoginBinding
 import com.example.ecommerceapp.utils.Resource
@@ -33,7 +35,9 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        binding.tvDontHaveAccount.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
         binding.apply {
             buttonLoginLogin.setOnClickListener {
                 val email = edEmailLogin.text.toString().trim()
@@ -55,7 +59,7 @@ class LoginFragment : Fragment() {
                         binding.buttonLoginLogin.revertAnimation()
 
                         Intent(requireActivity(), ShoppingActivity::class.java).also { intent ->
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
                         }
                     }

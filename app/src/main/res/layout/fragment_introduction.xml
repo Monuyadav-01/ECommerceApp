@@ -28,6 +28,7 @@
         app:layout_constraintTop_toTopOf="@id/guideline_eclipse_top" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/start_button"
         android:layout_width="@dimen/smallButtonWidth"
         android:layout_height="@dimen/smallButtonHeight"
         app:layout_constraintBottom_toBottomOf="parent"
