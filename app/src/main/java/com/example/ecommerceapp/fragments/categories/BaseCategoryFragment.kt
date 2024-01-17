@@ -1,60 +1,110 @@
-package com.example.ecommerceapp.fragments.categories
+package com.example.kelineyt.fragments.categories
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.ecommerceapp.R
+import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.kelineyt.R
+import com.example.kelineyt.adapters.BestProductsAdapter
+import com.example.kelineyt.databinding.FragmentBaseCategoryBinding
+import com.example.kelineyt.util.showBottomNavigationView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
+    private lateinit var binding: FragmentBaseCategoryBinding
+    protected val offerAdapter: BestProductsAdapter by lazy { BestProductsAdapter() }
+    protected val  bestProductsAdapter: BestProductsAdapter by lazy { BestProductsAdapter() }
 
-/**
- * A simple [Fragment] subclass.
- * Use the [BaseCategoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class BaseCategoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentBaseCategoryBinding.inflate(inflater)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupOfferRv()
+        setupBestProductsRv()
+
+        bestProductsAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product",it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment,b)
+        }
+
+        offerAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product",it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment,b)
+        }
+
+        binding.rvOfferProducts.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (!recyclerView.canScrollVertically(1) && dx != 0){
+                    onOfferPagingRequest()
+                }
+            }
+        })
+
+        binding.nestedScrollBaseCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener{ v, _, scrollY, _, _ ->
+            if (v.getChildAt(0).bottom <= v.height + scrollY){
+               onBestProductsPagingRequest()
+            }
+        })
+    }
+
+    fun showOfferLoading(){
+        binding.offerProductsProgressBar.visibility = View.VISIBLE
+    }
+
+    fun hideOfferLoading(){
+        binding.offerProductsProgressBar.visibility = View.GONE
+    }
+
+    fun showBestProductsLoading(){
+        binding.bestProductsProgressBar.visibility = View.VISIBLE
+    }
+
+    fun hideBestProductsLoading(){
+        binding.bestProductsProgressBar.visibility = View.GONE
+    }
+
+    open fun onOfferPagingRequest(){
+
+    }
+
+    open fun onBestProductsPagingRequest(){
+
+    }
+
+    private fun setupBestProductsRv() {
+        binding.rvBestProducts.apply {
+            layoutManager =
+                GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+            adapter = bestProductsAdapter
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_base_category, container, false)
+    private fun setupOfferRv() {
+        binding.rvOfferProducts.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+            adapter = offerAdapter
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BaseCategoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BaseCategoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onResume() {
+        super.onResume()
+        showBottomNavigationView()
     }
+
 }

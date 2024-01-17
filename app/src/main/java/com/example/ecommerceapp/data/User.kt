@@ -1,12 +1,10 @@
-package com.example.ecommerceapp.data
+package com.example.kelineyt.data
 
 data class User(
     val firstName: String,
     val lastName: String,
     val email: String,
-    val password: String,
-    val imagePath: String = ""
-) {
-    constructor() : this("", "", "", "", "")
-
+    var imagePath: String = ""
+){
+    constructor(): this("","","","")
 }

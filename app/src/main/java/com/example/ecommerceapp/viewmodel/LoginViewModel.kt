@@ -1,8 +1,8 @@
-package com.example.ecommerceapp.viewmodel
+package com.example.kelineyt.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommerceapp.utils.Resource
+import com.example.kelineyt.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -23,43 +22,39 @@ class LoginViewModel @Inject constructor(
     private val _resetPassword = MutableSharedFlow<Resource<String>>()
     val resetPassword = _resetPassword.asSharedFlow()
 
-
     fun login(email: String, password: String) {
-
-        viewModelScope.launch {
-            _login.emit(Resource.Loading())
-
-            try {
-                firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
-                    viewModelScope.launch {
-                        it.user?.let {
-                            _login.emit(Resource.Success(it))
-                        }
-                    }
-                }.addOnFailureListener {
-                    viewModelScope.launch {
-                        _login.emit(Resource.Error(it.message.toString()))
-                    }
+        viewModelScope.launch { _login.emit(Resource.Loading()) }
+        firebaseAuth.signInWithEmailAndPassword(
+            email, password
+        ).addOnSuccessListener {
+            viewModelScope.launch {
+                it.user?.let {
+                    _login.emit(Resource.Success(it))
                 }
-            } catch (e: Exception) {
-                _login.emit(Resource.Error(e.message.toString()))
             }
-
+        }.addOnFailureListener {
+            viewModelScope.launch {
+                _login.emit(Resource.Error(it.message.toString()))
+            }
         }
     }
 
     fun resetPassword(email: String) {
-        firebaseAuth.sendPasswordResetEmail(email)
+        viewModelScope.launch {
+            _resetPassword.emit(Resource.Loading())
+        }
+
+        firebaseAuth
+            .sendPasswordResetEmail(email)
             .addOnSuccessListener {
                 viewModelScope.launch {
                     _resetPassword.emit(Resource.Success(email))
                 }
-            }.addOnFailureListener {
+            }
+            .addOnFailureListener {
                 viewModelScope.launch {
                     _resetPassword.emit(Resource.Error(it.message.toString()))
                 }
             }
     }
 }
-
-

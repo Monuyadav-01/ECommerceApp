@@ -1,15 +1,16 @@
-package com.example.ecommerceapp.adapters
+package com.example.kelineyt.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.ecommerceapp.data.Product
-import com.example.ecommerceapp.databinding.BestDealsRvItemBinding
+import com.example.kelineyt.data.Product
+import com.example.kelineyt.databinding.BestDealsRvItemBinding
 
-class BestDealsAdapters : RecyclerView.Adapter<BestDealsAdapters.BestDealsViewHolder>() {
+class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealsViewHolder>() {
 
     inner class BestDealsViewHolder(private val binding: BestDealsRvItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -19,27 +20,26 @@ class BestDealsAdapters : RecyclerView.Adapter<BestDealsAdapters.BestDealsViewHo
                 product.offerPercentage?.let {
                     val remainingPricePercentage = 1f - it
                     val priceAfterOffer = remainingPricePercentage * product.price
-                    tvOldPrice.text = "${String.format(" % .2f", priceAfterOffer)}"
+                    tvNewPrice.text = "$ ${String.format("%.2f",priceAfterOffer)}"
                 }
-                tvNewPrice.text = "$ ${product.price}"
+                tvOldPrice.text = "$ ${product.price}"
                 tvDealProductName.text = product.name
             }
         }
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<Product>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem.id == newItem.id
+
         }
 
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
         }
-
     }
 
-    val differ =
-        AsyncListDiffer(this, differCallback)
+    val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BestDealsViewHolder {
         return BestDealsViewHolder(
@@ -49,13 +49,32 @@ class BestDealsAdapters : RecyclerView.Adapter<BestDealsAdapters.BestDealsViewHo
         )
     }
 
+    override fun onBindViewHolder(holder: BestDealsViewHolder, position: Int) {
+        val product = differ.currentList[position]
+        holder.bind(product)
+
+        holder.itemView.setOnClickListener {
+            onClick?.invoke(product)
+        }
+
+    }
+
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
 
-    override fun onBindViewHolder(holder: BestDealsViewHolder, position: Int) {
-        val product = differ.currentList[position]
-        holder.bind(product)
-    }
-
+    var onClick: ((Product) -> Unit)? = null
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

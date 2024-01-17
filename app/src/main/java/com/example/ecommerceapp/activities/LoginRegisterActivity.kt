@@ -1,14 +1,15 @@
-package com.example.ecommerceapp.activities
+package com.example.kelineyt.activities
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ecommerceapp.R
+import android.os.Bundle
+import com.example.kelineyt.R
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class LoginRegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login_register)
+        setContentView(R.layout.actitivty_login_register)
     }
 }

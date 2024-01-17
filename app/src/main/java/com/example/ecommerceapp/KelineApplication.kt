@@ -1,8 +1,9 @@
-package com.example.ecommerceapp
+package com.example.kelineyt
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class ShoppingApplication : Application() {
+class KelineApplication: Application() {
+
 }

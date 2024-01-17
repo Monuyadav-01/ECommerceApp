@@ -1,4 +1,4 @@
-package com.example.ecommerceapp.fragments.loginregister
+package com.example.kelineyt.fragments.lognRegister
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,35 +9,31 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.ecommerceapp.R
-import com.example.ecommerceapp.activities.ShoppingActivity
-import com.example.ecommerceapp.databinding.FragmentIntroductionBinding
-import com.example.ecommerceapp.viewmodel.IntroductionViewModel
-import com.example.ecommerceapp.viewmodel.IntroductionViewModel.Companion.ACCOUNT_OPTIONS_FRAGMENT
-import com.example.ecommerceapp.viewmodel.IntroductionViewModel.Companion.SHOPPING_ACTIVITY
+import com.example.kelineyt.R
+import com.example.kelineyt.activities.ShoppingActivity
+import com.example.kelineyt.databinding.FragmentIntrodcutionBinding
+import com.example.kelineyt.viewmodel.IntroductionViewModel
+import com.example.kelineyt.viewmodel.IntroductionViewModel.Companion.ACCOUNT_OPTIONS_FRAGMENT
+import com.example.kelineyt.viewmodel.IntroductionViewModel.Companion.SHOPPING_ACTIVITY
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class IntroductionFragment : Fragment() {
-
-    private lateinit var binding: FragmentIntroductionBinding
+class IntroductionFragment : Fragment(R.layout.fragment_introdcution) {
+    private lateinit var binding: FragmentIntrodcutionBinding
     private val viewModel by viewModels<IntroductionViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentIntroductionBinding.inflate(layoutInflater, container, false)
+    ): View {
+        binding = FragmentIntrodcutionBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         lifecycleScope.launchWhenStarted {
             viewModel.navigate.collect {
@@ -58,9 +54,9 @@ class IntroductionFragment : Fragment() {
             }
         }
 
-        binding.startButton.setOnClickListener {
+        binding.buttonStart.setOnClickListener {
+            viewModel.startButtonClick()
             findNavController().navigate(R.id.action_introductionFragment_to_accountOptionsFragment)
         }
     }
-
 }

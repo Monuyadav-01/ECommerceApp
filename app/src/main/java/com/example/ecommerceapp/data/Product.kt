@@ -1,4 +1,4 @@
-package com.example.ecommerceapp.data
+package com.example.kelineyt.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -14,6 +14,7 @@ data class Product(
     val colors: List<Int>? = null,
     val sizes: List<String>? = null,
     val images: List<String>
-) : Parcelable {
-    constructor() : this("0", "", "", 0f, images = emptyList())
+): Parcelable {
+    constructor():this("0","","",0f,images = emptyList())
+
 }
